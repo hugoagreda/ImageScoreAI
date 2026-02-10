@@ -1,5 +1,3 @@
-This document describes the methodology used to evaluate and score the visual quality of real estate images using explainable computer vision techniques.
-
 # Metric 1 — Lighting Quality Evaluation
 
 ## 1. General Description

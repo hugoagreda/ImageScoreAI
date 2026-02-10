@@ -1,4 +1,4 @@
-# Real Estate Visual Quality AI
+# VisionScoreAI
 
 This project presents an intelligent system for evaluating and improving the visual quality of real estate interior images using computer vision techniques.
 
