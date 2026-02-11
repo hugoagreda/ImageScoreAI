@@ -1,6 +1,8 @@
-# Dataset Pipeline – Steps
+# Real Estate Visual Learning Pipeline
 
-## 1️⃣ Download Images
+---
+
+# 1️⃣ Download Images
 
 **Script**
 `backend/scripts/download_kaggle_images.py`
@@ -28,7 +30,7 @@ Downloads images incrementally without duplicates.
 
 ---
 
-## 2️⃣ Visual Filtering (Scoring)
+# 2️⃣ Visual Filtering (Scoring)
 
 **Script**
 `backend/scripts/filter_interiors.py`
@@ -56,37 +58,7 @@ Analyzes images and generates an `indoor_score` based on visual features.
 
 ---
 
-## 3️⃣ Preview Results
-
-**Script**
-`backend/scripts/preview_filter_results.py`
-
-**Command**
-
-```bash
-python preview_filter_results.py
-```
-
-**Reads**
-
-```
-data/datasets/interior_filter_pro.csv
-```
-
-**Creates**
-
-```
-data/images/filter_preview/
-├── interiors/
-└── rejected/
-```
-
-**Purpose**
-Copies sample images to visually validate filtering results.
-
----
-
-## 4️⃣ Semantic Filtering (YOLO)
+# 3️⃣ Semantic Filtering (YOLO)
 
 **Script**
 `backend/scripts/yolo_semantic_filter.py`
@@ -110,11 +82,14 @@ data/datasets/interior_semantic.csv
 ```
 
 **Purpose**
-Runs a pretrained YOLO model to detect interior-related objects (bed, couch, chair, table, tv, etc.) and adds a semantic validation layer on top of the visual filter.
+Adds semantic validation using YOLO object detection.
+
+**Note**
+YOLO is used only as a semantic signal layer, not as a final classifier.
 
 ---
 
-## 5️⃣ Create Final Dataset (Visual + YOLO Fusion)
+# 4️⃣ Create Final Dataset (Visual + YOLO Fusion)
 
 **Script**
 `backend/scripts/create_final_dataset.py`
@@ -138,15 +113,234 @@ data/datasets/interior_final_candidates.csv
 ```
 
 **Purpose**
-Combines visual filtering and YOLO semantic validation to generate a clean dataset of confirmed interior images.
-Adds an initial automatic `quality_bucket` label (good / medium / bad) and supports optional human labeling.
+
+Creates the final dataset used for learning.
+
+Adds:
+
+* `quality_bucket`
+* `quality_bucket_human`
+* `final_quality`
+
+`final_quality` becomes the single source of truth for training.
+
+Human labeling happens here.
 
 ---
 
-## ⚠️ Notes
+# ==============================
 
-* Scripts never modify original images.
-* Preview folders contain copies and can be deleted anytime.
-* `interior_filter_pro.csv` stores only metadata and scores, not images.
-* YOLO adds semantic information but does not move or delete files.
-* The final dataset step is the entry point for human-in-the-loop quality labeling.
+# VISUAL LEARNING PIPELINE
+
+# ==============================
+
+# 5️⃣ Extract Visual Embeddings (OpenCLIP)
+
+**Script**
+`backend/scripts/extract_embeddings.py`
+
+**Command**
+
+```bash
+python extract_embeddings.py
+```
+
+**Reads**
+
+```
+data/datasets/interior_final_candidates.csv
+data/images/kaggle_raw/
+```
+
+**Creates**
+
+```
+data/embeddings/realestate_embeddings.parquet
+```
+
+**Purpose**
+
+Encodes each image into a visual embedding using OpenCLIP.
+
+This transforms the project from dataset engineering into representation learning.
+
+---
+
+# 6️⃣ Visualize Embedding Space (Diagnostic)
+
+**Script**
+`backend/scripts/visualize_embeddings.py`
+
+**Command**
+
+```bash
+python visualize_embeddings.py
+```
+
+**Reads**
+
+```
+data/embeddings/realestate_embeddings.parquet
+```
+
+**Purpose**
+
+Projects embeddings into 2D using UMAP to verify visual structure.
+
+Diagnostic only. No files created.
+
+---
+
+# 7️⃣ Train Quality Head (Initial Learning Layer)
+
+**Script**
+`backend/scripts/train_quality_head.py`
+
+**Command**
+
+```bash
+python train_quality_head.py
+```
+
+**Reads**
+
+```
+data/embeddings/realestate_embeddings.parquet
+```
+
+**Creates**
+
+```
+models/quality_head.joblib
+```
+
+**Purpose**
+
+Learns initial mapping:
+
+```
+embedding → good / medium / bad
+```
+
+Used as pseudo-human baseline.
+
+---
+
+# 8️⃣ Human-in-the-loop Review (Ranking-Based)
+
+**Script**
+`backend/scripts/pseudo_human_loop.py`
+
+**Command**
+
+```bash
+python pseudo_human_loop.py
+```
+
+**Reads**
+
+```
+realestate_embeddings.parquet
+quality_head.joblib
+```
+
+**Purpose**
+
+Shows most uncertain images first for efficient human correction.
+
+Does NOT retrain automatically.
+
+---
+
+# ==============================
+
+# RANKING ENGINE (CORE SYSTEM)
+
+# ==============================
+
+# 9️⃣ Train Pairwise Ranker
+
+**Script**
+`backend/scripts/train_pairwise_ranker.py`
+
+**Command**
+
+```bash
+python train_pairwise_ranker.py
+```
+
+**Reads**
+
+```
+realestate_embeddings.parquet
+```
+
+**Creates**
+
+```
+models/pairwise_ranker.joblib
+```
+
+**Purpose**
+
+Learns visual preference direction:
+
+```
+Image A > Image B
+```
+
+Transforms classification into ranking learning.
+
+---
+
+# 🔟 Fast Global Ranking (Production Method)
+
+**Script**
+`backend/scripts/build_fast_ranking.py`
+
+**Command**
+
+```bash
+python build_fast_ranking.py
+```
+
+**Reads**
+
+```
+realestate_embeddings.parquet
+pairwise_ranker.joblib
+```
+
+**Creates**
+
+```
+data/embeddings/realestate_fast_ranking.parquet
+```
+
+**Purpose**
+
+Computes ranking score using:
+
+```
+fast_rank_score = embedding · w
+```
+
+This is the scalable ranking system used for production.
+
+---
+
+# ==============================
+
+# ⚠️ IMPORTANT NOTES
+
+# ==============================
+
+* Images are never modified or moved by the pipeline.
+* The system is CSV-driven — folder structure is not used for training logic.
+* YOLO provides semantic signals only.
+* `final_quality` is the only label used for learning.
+* Embeddings are reused across all models.
+* Pairwise ranking defines the global visual quality axis.
+* Fast ranking replaces expensive pairwise comparisons.
+
+---

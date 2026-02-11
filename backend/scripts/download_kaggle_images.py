@@ -11,7 +11,7 @@ CSV_PATH = "../data/datasets/kaggle_prefiltered.csv"
 OUTPUT_DIR = Path("../data/images/kaggle_raw")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-MAX_NEW_DOWNLOADS = 100   # 👈 cuántas imágenes nuevas quieres descargar por ejecución
+MAX_NEW_DOWNLOADS = 250   # 👈 cuántas imágenes nuevas quieres descargar por ejecución
 TIMEOUT = 10
 HEADERS = {"User-Agent": "Mozilla/5.0"}
 

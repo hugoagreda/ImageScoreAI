@@ -10,7 +10,7 @@ import pandas as pd
 INPUT_DIR = Path("../data/images/kaggle_raw")
 OUTPUT_CSV = Path("../data/datasets/interior_filter_pro.csv")
 
-MAX_IMAGES = 100   # ajusta según necesites
+MAX_IMAGES = 251   # ajusta según necesites
 
 # ======================================
 # FEATURES BASE
