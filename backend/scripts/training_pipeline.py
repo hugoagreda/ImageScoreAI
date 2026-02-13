@@ -6,8 +6,8 @@ import random
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import classification_report
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import classification_report, accuracy_score
 
 
 # =====================================
@@ -17,7 +17,6 @@ from sklearn.metrics import classification_report
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 EMB_PATH = BASE_DIR / "data/embeddings/realestate_embeddings.parquet"
-
 RANKER_PATH = BASE_DIR / "models/pairwise_ranker.joblib"
 QUALITY_HEAD_PATH = BASE_DIR / "models/quality_head.joblib"
 
@@ -45,6 +44,7 @@ def load_embeddings():
 
     return df
 
+
 # =====================================
 # TRAIN PAIRWISE RANKER
 # =====================================
@@ -55,6 +55,13 @@ def train_pairwise_ranker(df):
     X = np.vstack(df["embedding"].values)
     y = df["final_quality"].values
 
+    unique_classes = np.unique(y)
+
+    if len(unique_classes) < 2:
+        print("⚠️ Solo hay una clase presente. Ranker no se entrena.")
+        return
+
+    # Normalización
     X = X / np.linalg.norm(X, axis=1, keepdims=True)
 
     pairs_X = []
@@ -69,7 +76,6 @@ def train_pairwise_ranker(df):
 
         i, j = random.sample(indices, 2)
 
-        # ⚠️ Evita crash si una clase desaparece
         if y[i] not in RANK_MAP or y[j] not in RANK_MAP:
             attempts += 1
             continue
@@ -84,21 +90,24 @@ def train_pairwise_ranker(df):
         emb_i = X[i]
         emb_j = X[j]
 
+        # 🔥 SOLO UNA DIRECCIÓN (mejor generalización)
         pairs_X.append(emb_i - emb_j)
         pairs_y.append(1 if rank_i > rank_j else 0)
 
-        pairs_X.append(emb_j - emb_i)
-        pairs_y.append(1 if rank_j > rank_i else 0)
-
         attempts += 1
+
+    if len(pairs_X) == 0:
+        print("⚠️ No hay pares comparables.")
+        return
 
     pairs_X = np.array(pairs_X)
     pairs_y = np.array(pairs_y)
 
     model = LogisticRegression(
         max_iter=2000,
+        solver="saga",
         fit_intercept=False,
-        n_jobs=-1
+        random_state=42
     )
 
     model.fit(pairs_X, pairs_y)
@@ -108,17 +117,18 @@ def train_pairwise_ranker(df):
 
     print(f"✅ Ranker guardado en {RANKER_PATH}")
 
+
 # =====================================
-# TRAIN QUALITY HEAD
+# TRAIN QUALITY HEAD (K-FOLD)
 # =====================================
 def train_quality_head(df):
 
-    print("\n🧠 Entrenando quality head...")
+    print("\n🧠 Entrenando quality head (Stratified K-Fold)...")
 
     X = np.vstack(df["embedding"].values)
     y = df["final_quality"].values
 
-    # 🔥 Normalización robusta (alineado runtime)
+    # Normalización robusta
     norms = np.linalg.norm(X, axis=1, keepdims=True)
     norms[norms == 0] = 1e-8
     X = X / norms
@@ -126,53 +136,78 @@ def train_quality_head(df):
     le = LabelEncoder()
     y_enc = le.fit_transform(y)
 
-    # ⚠️ Si solo queda 1 clase, no entrenamos
     if len(np.unique(y_enc)) < 2:
-        print("⚠️ Solo hay una clase presente. Quality head no se entrena.")
+        print("⚠️ Solo hay una clase presente.")
         return
 
-    X_train, X_val, y_train, y_val = train_test_split(
-        X,
-        y_enc,
-        test_size=0.2,
-        random_state=42,
-        stratify=y_enc
-    )
+    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
-    model = LogisticRegression(
+    acc_scores = []
+
+    fold = 1
+
+    for train_idx, val_idx in skf.split(X, y_enc):
+
+        print(f"\n🔁 Fold {fold}")
+
+        X_train, X_val = X[train_idx], X[val_idx]
+        y_train, y_val = y_enc[train_idx], y_enc[val_idx]
+
+        model = LogisticRegression(
+            max_iter=2000,
+            solver="saga",
+            penalty="l2",
+            C=1.0,
+            class_weight="balanced",
+            random_state=42
+        )
+
+        model.fit(X_train, y_train)
+
+        y_pred = model.predict(X_val)
+
+        acc = accuracy_score(y_val, y_pred)
+        acc_scores.append(acc)
+
+        present_labels = np.unique(np.concatenate([y_val, y_pred]))
+
+        print(classification_report(
+            y_val,
+            y_pred,
+            labels=present_labels,
+            target_names=le.inverse_transform(present_labels)
+        ))
+
+        fold += 1
+
+    print("\n📊 Accuracy media K-Fold:", np.mean(acc_scores))
+
+    # 🔥 Entrenar modelo final con TODO el dataset
+    print("\n🏁 Entrenando modelo final con todo el dataset...")
+
+    final_model = LogisticRegression(
         max_iter=2000,
-        solver="lbfgs",
+        solver="saga",
+        penalty="l2",
+        C=1.0,
         class_weight="balanced",
         random_state=42
     )
 
-    model.fit(X_train, y_train)
-
-    print("\n📊 Evaluación:")
-
-    y_pred = model.predict(X_val)
-
-    # 🔥 SOLUCIÓN DEFINITIVA AL ERROR
-    present_labels = np.unique(np.concatenate([y_val, y_pred]))
-
-    print(classification_report(
-        y_val,
-        y_pred,
-        labels=present_labels,
-        target_names=le.inverse_transform(present_labels)
-    ))
+    final_model.fit(X, y_enc)
 
     QUALITY_HEAD_PATH.parent.mkdir(parents=True, exist_ok=True)
 
     joblib.dump({
-        "model": model,
+        "model": final_model,
         "label_encoder": le
     }, QUALITY_HEAD_PATH)
 
     print(f"✅ Quality head guardado en {QUALITY_HEAD_PATH}")
 
+
 # =====================================
-# TRAINING PIPELINE (SIMPLE)
+# TRAINING PIPELINE
 # =====================================
 def training_pipeline(train_ranker=True, train_quality=True):
 
@@ -188,9 +223,9 @@ def training_pipeline(train_ranker=True, train_quality=True):
 
     print("\n🏁 TRAINING COMPLETADO")
 
+
 # =====================================
 # ENTRYPOINT
 # =====================================
-
 if __name__ == "__main__":
     training_pipeline()

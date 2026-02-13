@@ -13,7 +13,7 @@ import torch
 
 from runtime.runtime_models import encode_image
 
-IMG = 50
+IMG = 300
 YOLO_MODEL = None
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -421,10 +421,12 @@ def create_final_dataset():
 
     df = pd.read_csv(INPUT_CSV)
 
-    # 🔥 DATASET LIMPIO
-    df["quality_bucket"] = "unknown"
+    # 🔥 SOLO interiores YOLO
+    df = df[df["has_semantic_interior"] == 1].copy()
+
+    df["quality_bucket"] = "medium"
     df["quality_bucket_human"] = ""
-    df["final_quality"] = "unknown"
+    df["final_quality"] = df["quality_bucket"]
 
     df = df.astype({
         "quality_bucket": "string",
@@ -435,11 +437,11 @@ def create_final_dataset():
     OUTPUT_CSV.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(OUTPUT_CSV, index=False)
 
-    print("✅ FINAL DATASET creado (modo CLEAN)")
+    print(f"✅ FINAL DATASET creado (solo interiores): {len(df)} imágenes")
 
 def human_label_step():
 
-    print("\n🧠 HUMAN LABEL STEP (ACTIVE LEARNING CLEAN MODE)")
+    print("\n🧠 HUMAN LABEL STEP (ACTIVE LEARNING REAL)")
 
     while True:
         try:
@@ -471,11 +473,10 @@ def human_label_step():
             continue
 
         img = cv2.imread(str(img_path))
-
         if img is None:
             continue
 
-        cv2.imshow("Human Label", img)
+        cv2.imshow("Human Label Active", img)
 
         print("\n1 = bad | 2 = medium | 3 = good | ESC = salir")
 
@@ -486,27 +487,23 @@ def human_label_step():
             break
         elif key == ord("1"):
             df.loc[idx, "quality_bucket_human"] = "bad"
+            df.loc[idx, "final_quality"] = "bad"
         elif key == ord("2"):
             df.loc[idx, "quality_bucket_human"] = "medium"
+            df.loc[idx, "final_quality"] = "medium"
         elif key == ord("3"):
             df.loc[idx, "quality_bucket_human"] = "good"
+            df.loc[idx, "final_quality"] = "good"
 
         count += 1
 
     cv2.destroyAllWindows()
 
-    # 🔥 SOLO etiquetas humanas pasan a final_quality
-    def merge_labels(row):
-        human = str(row.get("quality_bucket_human", "")).strip()
-        return human if human not in ["", "nan"] else "unknown"
-
-    df["final_quality"] = df.apply(merge_labels, axis=1)
-
     df.to_csv(CSV_PATH, index=False)
 
-    print(f"\n✅ Etiquetadas manualmente: {count}")
+    print(f"\n✅ Etiquetadas manualmente (Active Learning REAL): {count}")
 
-def prune_outdoor_images():
+def prune_bad_images():
 
     print("\n🧹 Eliminando imágenes OUTDOOR según YOLO...")
 
@@ -530,6 +527,7 @@ def prune_outdoor_images():
         norm = img.resolve().as_posix()
 
         if norm not in keep_paths:
+
             try:
                 img.unlink()
                 deleted += 1
@@ -552,37 +550,115 @@ def extract_embeddings():
     CSV_PATH = BASE_DIR / "data/datasets/interior_final_candidates.csv"
     OUTPUT_PATH = BASE_DIR / "data/embeddings/realestate_embeddings.parquet"
 
-    df = pd.read_csv(CSV_PATH)
+    df = pd.read_csv(CSV_PATH, dtype=str)
 
-    # 🔥 SOLO DATA HUMANA
-    df = df[df["final_quality"] != "unknown"].copy()
+    # 🔥 USAR TODO EL DATASET FINAL
+    df = df[df["final_quality"].notna()]
 
     rows = []
 
-    for _, row in df.iterrows():
+    total = len(df)
+    print(f"\n🧠 Extrayendo embeddings ({total} imágenes)")
+
+    for i, (_, row) in enumerate(df.iterrows(), 1):
 
         img_path = Path(row["image_path"])
 
         if not img_path.exists():
             continue
 
-        with Image.open(img_path) as im:
-            emb = encode_image(im)
+        try:
+            with Image.open(img_path) as im:
+                emb = encode_image(im)
 
-        rows.append({
-            "image_path": img_path.as_posix(),
-            "final_quality": row["final_quality"],
-            "embedding": emb.tolist()
-        })
+            rows.append({
+                "image_path": img_path.as_posix(),
+                "final_quality": row["final_quality"],
+                "embedding": emb.tolist()
+            })
+
+        except Exception as e:
+            print(f"⚠️ Error con {img_path}: {e}")
+
+        if i % 50 == 0 or i == total:
+            print(f"🧠 [{i}/{total}] embeddings")
 
     pd.DataFrame(rows).to_parquet(OUTPUT_PATH, index=False)
 
-    print(f"✅ Embeddings creados SOLO con etiquetas humanas: {len(rows)}")
+    print(f"✅ Embeddings creados (total): {len(rows)}")
+
+# =====================================
+# 6️⃣ SECOND ROUND
+# =====================================
+def auto_label_step():
+
+    print("\n🤖 AUTO LABEL STEP (MODEL ASSISTED)")
+
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    CSV_PATH = BASE_DIR / "data/datasets/interior_final_candidates.csv"
+    EMB_PATH = BASE_DIR / "data/embeddings/realestate_embeddings.parquet"
+    MODEL_PATH = BASE_DIR / "models/quality_head.joblib"
+
+    if not MODEL_PATH.exists():
+        print("⚠️ No existe quality_head. Auto label cancelado.")
+        return
+
+    if not EMB_PATH.exists():
+        print("⚠️ No existen embeddings. Auto label cancelado.")
+        return
+
+    df = pd.read_csv(CSV_PATH, dtype=str)
+    df_emb = pd.read_parquet(EMB_PATH)
+
+    import joblib
+
+    data = joblib.load(MODEL_PATH)
+    model = data["model"]
+    le = data["label_encoder"]
+
+    pending = df[df["quality_bucket_human"].isna() | (df["quality_bucket_human"] == "")].copy()
+
+    if len(pending) == 0:
+        print("✅ No hay imágenes nuevas que auto-etiquetar.")
+        return
+
+    merged = pending.merge(
+        df_emb[["image_path", "embedding"]],
+        on="image_path",
+        how="left"
+    )
+
+    merged = merged[merged["embedding"].notna()]
+
+    if len(merged) == 0:
+        print("⚠️ No hay embeddings disponibles para auto label.")
+        return
+
+    X = np.vstack(merged["embedding"].values)
+
+    norms = np.linalg.norm(X, axis=1, keepdims=True)
+    norms[norms == 0] = 1e-8
+    X = X / norms
+
+    proba = model.predict_proba(X)
+    preds = np.argmax(proba, axis=1)
+    labels = le.inverse_transform(preds)
+
+    updated = 0
+
+    for idx, label in zip(merged.index, labels):
+        df.loc[idx, "final_quality"] = label
+        updated += 1
+
+    df.to_csv(CSV_PATH, index=False)
+
+    print(f"✅ Auto-etiquetadas por modelo: {updated}")
 
 # =====================================
 # BOOTSTRAP
 # =====================================
-def bootstrap_dataset(img_batch=IMG):
+def bootstrap_dataset(auto_mode=False,img_batch=IMG):
 
     print("\n========== BOOTSTRAP DATASET ==========")
     total_start = time.time()
@@ -591,11 +667,20 @@ def bootstrap_dataset(img_batch=IMG):
     run_step("[2/7] FILTER", filter_interiors, max_images=None)
     run_step("[3/7] YOLO SEMANTIC", yolo_semantic_filter)
     run_step("[4/7] CREATE FINAL DATASET", create_final_dataset)
-    run_step("[5/7] HUMAN LABEL", human_label_step)
-    run_step("[6/7] PRUNE BAD IMAGES", prune_outdoor_images)
+    if auto_mode:
+        run_step("[5/7] AUTO LABEL", auto_label_step)
+    else:
+        run_step("[5/7] HUMAN LABEL", human_label_step)
+    run_step("[6/7] PRUNE BAD IMAGES", prune_bad_images)
     run_step("[7/7] EXTRACT EMBEDDINGS", extract_embeddings)
 
     print("\n🏁 BOOTSTRAP TOTAL:", round(time.time() - total_start, 2), "s")
 
 if __name__ == "__main__":
-    bootstrap_dataset()
+
+    import sys
+
+    # 🔥 Detecta si ejecutas con --auto
+    auto_mode = "--auto" in sys.argv
+
+    bootstrap_dataset(auto_mode=auto_mode)
