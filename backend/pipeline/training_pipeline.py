@@ -32,7 +32,7 @@ random.seed(42)
 np.random.seed(42)
 
 # =====================================
-# LOAD EMBEDDINGS
+# LOAD EMBEDDINGS (SAFE + INCREMENTAL)
 # =====================================
 def load_embeddings():
 
@@ -52,13 +52,52 @@ def load_embeddings():
 
     df = pd.concat(dfs, ignore_index=True)
 
-    # convertir embeddings a numpy
+    # =====================================
+    # 🔥 convertir embeddings a numpy
+    # =====================================
     df["embedding"] = df["embedding"].apply(
         lambda x: np.array(x, dtype=np.float32)
     )
 
-    # pseudo-labels auto si existen
+    # =====================================
+    # 🔥 MERGE SEGURO CON CSV DATASET
+    # =====================================
+    csv_path = BASE_DIR / "data/datasets/interior_final_candidates.csv"
+
+    if csv_path.exists():
+
+        df_csv = pd.read_csv(csv_path, dtype=str)
+
+        # columnas obligatorias
+        if "final_quality" not in df_csv.columns:
+            df_csv["final_quality"] = ""
+
+        # 🔥 COLUMNAS AUTO SEGURAS (NO EXISTEN EN ROUND 1)
+        for col in ["auto_quality", "auto_confidence", "label_source"]:
+            if col not in df_csv.columns:
+                df_csv[col] = np.nan if col == "auto_confidence" else ""
+
+        df = df.merge(
+            df_csv[[
+                "image_path",
+                "final_quality",
+                "auto_quality",
+                "auto_confidence",
+                "label_source"
+            ]],
+            on="image_path",
+            how="left"
+        )
+
+    # =====================================
+    # 🔥 PSEUDO LABELS AUTO SI EXISTEN
+    # =====================================
     if "auto_quality" in df.columns and "auto_confidence" in df.columns:
+
+        df["auto_confidence"] = pd.to_numeric(
+            df["auto_confidence"],
+            errors="coerce"
+        )
 
         mask = (
             df["final_quality"].isna()
@@ -68,14 +107,20 @@ def load_embeddings():
         df.loc[mask, "final_quality"] = df.loc[mask, "auto_quality"]
         df.loc[mask, "label_source"] = "auto"
 
-    # dedupe seguro
+    # =====================================
+    # 🔥 DEDUPE SEGURO
+    # =====================================
     df = df.drop_duplicates(
         subset=["image_path", "label_source"],
         keep="last"
     )
 
-    # solo entrenables
+    # =====================================
+    # 🔥 SOLO DATOS ENTRENABLES
+    # =====================================
     df = df[df["final_quality"].notna()].copy()
+    df = df[df["final_quality"] != ""].copy()
+
     df = df.sort_values("image_path").reset_index(drop=True)
 
     print(f"\nEmbeddings totales cargados: {len(df)}")
@@ -126,46 +171,44 @@ def train_pairwise_ranker(df):
     X = np.vstack(df["embedding"].values)
     y = df["final_quality"].values
 
-    # 🔥 protección real
+    # protección real
     if len(np.unique(y)) < 2:
         print("⚠️ Solo hay una clase presente. Ranker no se entrena.")
         return
 
     X = normalize_embeddings(X)
 
+    indices = list(range(len(df)))
+
     pairs_X = []
     pairs_y = []
 
-    indices = list(range(len(df)))
+    # =====================================
+    # 🔥 GENERAR SOLO PARES ÚNICOS REALES
+    # =====================================
 
-    attempts = 0
-    max_attempts = PAIR_SAMPLES * 10
+    for i in range(len(indices)):
+        for j in range(i + 1, len(indices)):
 
-    while len(pairs_X) < PAIR_SAMPLES and attempts < max_attempts:
+            yi = y[i]
+            yj = y[j]
 
-        i, j = random.sample(indices, 2)
+            if yi not in RANK_MAP or yj not in RANK_MAP:
+                continue
 
-        if y[i] not in RANK_MAP or y[j] not in RANK_MAP:
-            attempts += 1
-            continue
+            ri = RANK_MAP[yi]
+            rj = RANK_MAP[yj]
 
-        rank_i = RANK_MAP[y[i]]
-        rank_j = RANK_MAP[y[j]]
+            if ri == rj:
+                continue
 
-        if rank_i == rank_j:
-            attempts += 1
-            continue
+            diff = X[i] - X[j]
 
-        diff = X[i] - X[j]
+            if np.any(np.isnan(diff)):
+                continue
 
-        if np.any(np.isnan(diff)):
-            attempts += 1
-            continue
-
-        pairs_X.append(diff)
-        pairs_y.append(1 if rank_i > rank_j else 0)
-
-        attempts += 1
+            pairs_X.append(diff)
+            pairs_y.append(1 if ri > rj else 0)
 
     if len(pairs_X) == 0:
         print("⚠️ No hay pares comparables.")
@@ -173,6 +216,19 @@ def train_pairwise_ranker(df):
 
     pairs_X = np.array(pairs_X)
     pairs_y = np.array(pairs_y)
+
+    # =====================================
+    # 🔥 SUBSAMPLING INTELIGENTE
+    # =====================================
+
+    max_pairs = min(len(pairs_X), PAIR_SAMPLES)
+
+    if len(pairs_X) > max_pairs:
+        idx = np.random.choice(len(pairs_X), max_pairs, replace=False)
+        pairs_X = pairs_X[idx]
+        pairs_y = pairs_y[idx]
+
+    print(f"🔎 Pares usados para entrenamiento: {len(pairs_X)}")
 
     model = LogisticRegression(
         max_iter=2000,
