@@ -9,8 +9,6 @@ import numpy as np
 import cv2
 import requests
 import time
-import torch
-import joblib
 
 from runtime.runtime_models import encode_image
 from pipeline.training_pipeline import training_pipeline
@@ -1153,6 +1151,64 @@ def auto_label_step():
     print(f"  📈 aceptación real: {round(ratio,3)}")
 
 # =====================================
+# 📊 DATASET VISUAL DEBUG
+# =====================================
+def dataset_visual_debug():
+
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    from pathlib import Path
+    import pandas as pd
+
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    semantic_csv = BASE_DIR / "data/datasets/interior_semantic.csv"
+    final_csv = BASE_DIR / "data/datasets/interior_final_candidates.csv"
+
+    print("\n📊 Generando gráficas del dataset...")
+
+    if semantic_csv.exists():
+
+        df = pd.read_csv(semantic_csv)
+
+        plt.figure(figsize=(8,4))
+        sns.histplot(df["room_score"], bins=30)
+        plt.title("Distribución room_score")
+        plt.show()
+
+        plt.figure(figsize=(6,6))
+        sns.scatterplot(
+            data=df,
+            x="indoor_score",
+            y="room_score",
+            alpha=0.4
+        )
+        plt.title("Indoor vs Room Score")
+        plt.show()
+
+    if final_csv.exists():
+
+        df_final = pd.read_csv(final_csv)
+
+        if "quality_bucket" in df_final.columns:
+            plt.figure(figsize=(6,4))
+            sns.countplot(data=df_final, x="quality_bucket")
+            plt.title("Quality Bucket Distribution")
+            plt.show()
+
+        if "auto_confidence" in df_final.columns:
+            plt.figure(figsize=(8,4))
+            sns.histplot(
+                df_final["auto_confidence"].dropna(),
+                bins=40
+            )
+            plt.title("Auto Confidence Distribution")
+            plt.show()
+
+    print("✅ Visual debug listo")
+
+
+# =====================================
 # BOOTSTRAP
 # =====================================
 def bootstrap_dataset(auto_mode=False, img_batch=IMG):
@@ -1189,6 +1245,11 @@ def bootstrap_dataset(auto_mode=False, img_batch=IMG):
 if __name__ == "__main__":
 
     import sys
+
     auto_mode = "--auto" in sys.argv
+    show_debug = "--debug" in sys.argv
 
     bootstrap_dataset(auto_mode=auto_mode)
+
+    if show_debug:
+        dataset_visual_debug()

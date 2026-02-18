@@ -1,6 +1,13 @@
 from PIL import Image
 import torch
+import os
+
+# 🔥 logs reales de transformers (progreso descarga)
+from transformers.utils import logging
+logging.set_verbosity_info()
+
 from transformers import BlipProcessor, BlipForConditionalGeneration
+
 
 # =====================================
 # LOAD MODEL ONCE (GLOBAL)
@@ -8,15 +15,33 @@ from transformers import BlipProcessor, BlipForConditionalGeneration
 
 print("🧠 Loading Visual Critic (BLIP)...")
 
+HF_TOKEN = os.getenv("HF_TOKEN")
+
+# ---------- Processor ----------
+print("⬇️ Loading BLIP processor...")
 processor = BlipProcessor.from_pretrained(
-    "Salesforce/blip-image-captioning-base"
+    "Salesforce/blip-image-captioning-base",
+    use_fast=False,
+    token=HF_TOKEN,
 )
 
+print("✅ Processor loaded")
+
+# ---------- Model ----------
+print("⬇️ Loading BLIP model weights (this can take time first run)...")
 model = BlipForConditionalGeneration.from_pretrained(
-    "Salesforce/blip-image-captioning-base"
+    "Salesforce/blip-image-captioning-base",
+    token=HF_TOKEN,
+    low_cpu_mem_usage=True,
+    torch_dtype=torch.float32
 )
 
+print("✅ Model weights loaded")
+
+# ---------- Device ----------
 device = "cuda" if torch.cuda.is_available() else "cpu"
+print(f"⚙️ Moving model to device: {device}")
+
 model.to(device)
 
 print("✅ Visual Critic ready")
@@ -27,6 +52,8 @@ print("✅ Visual Critic ready")
 # =====================================
 def generate_caption(image: Image.Image):
 
+    print("🧠 Generating caption...")
+
     inputs = processor(images=image, return_tensors="pt").to(device)
 
     out = model.generate(
@@ -35,6 +62,9 @@ def generate_caption(image: Image.Image):
     )
 
     caption = processor.decode(out[0], skip_special_tokens=True)
+
+    print(f"📝 Caption: {caption}")
+
     return caption.lower()
 
 
@@ -43,7 +73,9 @@ def generate_caption(image: Image.Image):
 # =====================================
 
 def visual_review(image: Image.Image, score=None, margin=None):
-    
+
+    print("🔎 Running visual review...")
+
     caption = generate_caption(image)
 
     feedback = []
@@ -87,6 +119,8 @@ def visual_review(image: Image.Image, score=None, margin=None):
     # fallback
     if len(feedback) == 0:
         feedback.append("✔ Escena visualmente correcta")
+
+    print("✅ Visual review completed")
 
     return {
         "caption": caption,
