@@ -1,0 +1,161 @@
+image_path,index,indoor_score,room_score,core_count,secondary_count,outdoor_count,detected_objects,has_semantic_interior,quality_bucket,quality_bucket_human,final_quality,is_new,auto_confidence,auto_quality,label_source
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_10.webp,2,0.699,0.7742,4,0,0,"tv,chair,chair,couch,couch,chair,dining table",1,good,good,good,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_13.webp,5,0.6438,0.7329,5,2,0,"refrigerator,microwave,mouse,oven,vase,dining table,tv,potted plant",1,medium,good,good,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_14.webp,6,0.6142,0.6207,2,0,0,"oven,dining table,dining table",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_15.webp,7,0.5664,0.6748,4,0,0,"refrigerator,chair,chair,chair,dining table,oven",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_16.webp,8,0.5969,0.6077,2,0,0,"microwave,oven",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_18.webp,10,0.6156,0.5417,1,0,0,couch,1,bad,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_19.webp,11,0.5733,0.59,2,0,0,"dining table,bed",1,bad,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_20.webp,13,0.5208,0.4955,2,3,1,"person,tv,potted plant,vase,bed,bench",1,bad,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_23.webp,16,0.5329,0.6497,5,0,0,"couch,chair,chair,chair,tv,chair,oven,chair,dining table",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_24.webp,17,0.5439,0.6479,3,1,0,"tv,couch,chair,potted plant,couch,chair,chair,tv",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_27.webp,20,0.7723,0.5792,0,0,0,,1,bad,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_29.webp,22,0.6383,0.6387,2,0,0,"tv,couch,couch",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_3.webp,23,0.7325,0.5494,0,0,0,,1,bad,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_30.webp,24,0.572,0.669,3,1,0,"couch,couch,tv,couch,potted plant,bed",1,medium,good,good,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_31.webp,25,0.5939,0.6954,4,0,0,"tv,couch,couch,dining table,couch,chair,chair,chair,chair",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_32.webp,26,0.5553,0.5765,2,2,0,"chair,potted plant,dining table,vase,chair,dining table",1,bad,good,good,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_33.webp,27,0.5727,0.5895,2,0,0,"tv,couch,couch,bowl",1,bad,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_34.webp,28,0.7644,0.516,0,1,0,"potted plant,potted plant,potted plant,potted plant",1,bad,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_36.webp,30,0.5395,0.5646,2,2,0,"tv,vase,vase,potted plant,potted plant,vase,cat,remote,bottle,microwave,bottle",1,bad,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_39.webp,33,0.5904,0.6028,2,2,0,"vase,vase,chair,potted plant,potted plant,chair,chair,chair,chair,chair,dining table,chair,chair,chair,dining table",1,medium,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_40.webp,35,0.5704,0.6678,3,0,0,"oven,sink,microwave",1,medium,good,good,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_41.webp,36,0.4902,0.5277,2,0,0,"chair,couch",1,bad,good,good,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_44.webp,39,0.5729,0.6697,3,0,0,"couch,couch,chair,remote,tv",1,medium,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_47.webp,42,0.5497,0.4923,1,0,0,"chair,chair",1,bad,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_5.webp,45,0.4867,0.525,2,0,0,"chair,chair,chair,chair,dining table,dining table",1,bad,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_51.webp,47,0.5533,0.655,3,2,0,"couch,chair,chair,tv,chair,book,couch,tv,chair,laptop",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_52.webp,48,0.6081,0.6161,2,0,0,"couch,bed",1,medium,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_54.webp,50,0.5717,0.6788,4,0,0,"refrigerator,couch,chair,chair,chair,dining table,chair",1,medium,bad,bad,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_55.webp,51,0.4961,0.6221,4,1,0,"couch,chair,chair,chair,potted plant,couch,tv,dining table,tv,potted plant",1,medium,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_57.webp,53,0.6715,0.7536,6,1,0,"couch,couch,person,chair,dining table,oven,dining table,microwave,refrigerator,chair",1,good,medium,medium,False,,,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_6.webp,56,0.6134,0.62,2,0,0,"chair,chair,dining table,chair,chair",1,medium,,,True,0.022694621921954688,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_63.webp,60,0.5088,0.4616,1,0,0,chair,1,bad,,bad,True,0.2615968856513327,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_64.webp,61,0.5427,0.567,2,0,0,"couch,tv",1,bad,,,True,0.07056108543331358,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_67.webp,64,0.5882,0.6811,3,0,0,"chair,bottle,dining table,dining table,oven,chair",1,medium,,,True,0.05379193084312334,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_7.webp,67,0.6834,0.6726,2,0,0,"dining table,chair",1,medium,,good,True,0.09198329743130405,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_74.webp,72,0.6118,0.6189,2,0,0,"chair,couch",1,medium,,,True,0.06634351056613151,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_75.webp,73,0.5472,0.6504,3,0,0,"couch,chair,chair,refrigerator",1,medium,,,True,0.01870407705412508,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_76.webp,74,0.5493,0.572,2,2,0,"couch,chair,couch,remote,clock,person,chair,chair",1,bad,,medium,True,0.10915726429414035,medium,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_81.webp,80,0.6138,0.7104,4,2,0,"potted plant,microwave,oven,sink,refrigerator,bowl,vase,bottle",1,medium,,,True,0.007360085338709799,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_82.webp,81,0.5428,0.5671,2,0,0,"chair,chair,couch,chair,couch",1,bad,,,True,0.07289851200937253,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_84.webp,83,0.5208,0.5506,2,0,0,"couch,chair,chair",1,bad,,good,True,0.16894646640126385,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_85.webp,84,0.5516,0.4937,1,0,0,refrigerator,1,bad,,good,True,0.09460253798490441,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_86.webp,85,0.6446,0.5634,1,1,0,"chair,chair,laptop",1,bad,,,True,0.0567182800799909,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_87.webp,86,0.5206,0.5504,2,0,0,"chair,chair,dining table,chair,chair,chair,bottle",1,bad,,good,True,0.1593850423521976,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_94.webp,94,0.5966,0.6075,2,0,0,"sink,oven",1,medium,,,True,0.055831667202689006,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_97.webp,97,0.5437,0.6578,4,1,0,"couch,chair,chair,tv,bottle,potted plant,dining table,potted plant,dining table,chair,bowl,chair",1,medium,,bad,True,0.0810206381692522,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_101.webp,,0.5749,0.6812,5,0,0,"microwave,oven,chair,oven,sink,dining table",1,medium,,,True,0.05848756215585492,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_102.webp,,0.5514,0.5736,2,0,0,"chair,dining table,chair,chair,chair",1,bad,,good,True,0.08672871359508481,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_103.webp,,0.5401,0.4851,1,0,0,microwave,1,bad,,,True,0.0359525448309001,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_105.webp,,0.5266,0.6349,3,0,0,"couch,couch,tv,chair,chair,chair,chair,chair",1,medium,,medium,True,0.08572100217799339,medium,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_108.webp,,0.4384,0.4888,2,0,0,"couch,chair,chair",1,bad,,,True,0.028538530719408206,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_111.webp,,0.5902,0.6926,4,2,0,"chair,chair,tv,chair,dining table,couch,couch,potted plant,dining table,chair,book",1,medium,,,True,0.05960304848036291,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_114.webp,,0.5228,0.6321,3,1,0,"chair,couch,chair,chair,chair,dining table,book",1,medium,,,True,0.04740748867624761,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_115.webp,,0.6896,0.6772,2,0,0,"chair,dining table,chair",1,medium,,bad,True,0.21665087622767115,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_116.webp,,0.6627,0.737,3,1,0,"chair,couch,chair,dining table,chair,chair,book,chair,dining table,book",1,medium,,,True,0.010299108882762587,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_120.webp,,0.5299,0.6374,3,0,0,"couch,chair,chair,remote,chair,dining table",1,medium,,,True,0.04621933043526344,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_121.webp,,0.5932,0.6849,3,0,0,"chair,bottle,bottle,chair,sink,bottle,bottle,bottle,dining table",1,medium,,good,True,0.122541094010004,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_125.webp,,0.6121,0.4852,1,2,1,"person,bench,chair,potted plant,bench,umbrella,bench,bench",1,bad,,bad,True,0.23371207424150292,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_129.webp,,0.4496,0.5872,4,1,0,"wine glass,couch,bowl,bowl,chair,cup,bowl,potted plant,dining table,tv,wine glass",1,bad,,,True,0.0061503260084367906,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_130.webp,,0.6046,0.5334,1,0,0,bed,1,bad,,,True,0.03247188676963214,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_131.webp,,0.5651,0.5038,1,0,0,"bed,bed,bed",1,bad,,,True,0.006258203522545636,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_134.webp,,0.5904,0.6928,4,1,0,"chair,potted plant,oven,refrigerator,dining table,bottle,bowl",1,medium,,medium,True,0.0944260713146951,medium,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_136.webp,,0.6466,0.645,2,0,0,"tv,couch,couch",1,medium,,,True,0.03020247937794483,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_137.webp,,0.5775,0.5931,2,0,0,"couch,chair,chair,chair",1,bad,,,True,0.07931625249884842,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_141.webp,,0.7397,0.5548,0,0,0,airplane,1,bad,,bad,True,0.19564829691637964,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_142.webp,,0.5318,0.4789,1,0,0,"toilet,bed,bottle",1,bad,,,True,0.07728480842359259,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_143.webp,,0.5235,0.5526,2,0,0,"chair,chair,dining table",1,bad,,bad,True,0.20778751166372822,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_144.webp,,0.4885,0.5264,2,0,1,"chair,couch,chair,bench,bottle",1,bad,,bad,True,0.11938855668885429,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_145.webp,,0.5649,0.6737,5,1,0,"chair,potted plant,microwave,dining table,couch,chair,microwave,refrigerator,chair",1,medium,,,True,0.062043807103871085,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_147.webp,,0.7187,0.4851,0,1,0,"potted plant,potted plant",1,bad,,bad,True,0.20244168705171528,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_149.webp,,0.6069,0.6152,2,2,0,"wine glass,dining table,chair,chair,potted plant,chair,chair,cup,wine glass,vase,wine glass,chair,wine glass,wine glass,chair",1,medium,,,True,0.03161342395445621,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_151.webp,,0.6227,0.627,2,1,1,"tv,potted plant,couch,potted plant,couch,couch,car",1,medium,,,True,0.06264282159599283,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_154.webp,,0.7648,0.5736,0,0,0,,1,bad,,bad,True,0.2401054891305841,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_156.webp,,0.4779,0.5184,2,1,0,"bed,potted plant,sink",1,bad,,,True,0.04716965165400343,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_157.webp,,0.5486,0.4914,1,0,0,"bed,bed",1,bad,,,True,0.04259935268701602,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_161.webp,,0.4938,0.6103,3,0,0,"refrigerator,bed,microwave",1,medium,,,True,0.022724120034851802,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_162.webp,,0.5861,0.5996,2,0,0,"couch,couch,dining table",1,bad,,bad,True,0.17630846366025626,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_165.webp,,0.6578,0.5734,1,0,1,"chair,chair,car,chair",1,bad,,bad,True,0.28038710140840206,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_171.webp,,0.4874,0.6056,3,1,0,"couch,chair,chair,clock,refrigerator",1,medium,,,True,0.04760097947318448,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_175.webp,,0.6514,0.5685,1,1,1,"couch,potted plant,potted plant,bench,bowl",1,bad,,bad,True,0.18794838908149214,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_176.webp,,0.5847,0.6785,3,0,0,"couch,couch,chair,chair,oven,chair,chair,couch",1,medium,,,True,0.00344383188496572,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_177.webp,,0.5656,0.6742,5,1,0,"refrigerator,tv,clock,couch,chair,chair,microwave,bottle,couch",1,medium,,,True,0.0660385540722398,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_178.webp,,0.7225,0.5419,0,0,0,,1,bad,,bad,True,0.2688525430533798,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_183.webp,,0.4963,0.6122,3,0,0,"chair,chair,couch,couch,chair,chair,chair,dining table",1,medium,,,True,0.037858847678129956,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_188.webp,,0.5594,0.5796,2,0,0,"couch,chair,couch,chair,chair",1,bad,,,True,0.028363538533987803,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_190.webp,,0.7132,0.6949,2,0,0,"couch,couch,chair,couch",1,medium,,,True,0.05581906964099104,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_200.webp,,0.6038,0.6129,2,1,0,"chair,potted plant,dining table,dining table,chair,chair",1,medium,,bad,True,0.28482168401115726,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_202.webp,,0.575,0.6712,3,2,0,"tv,potted plant,couch,couch,chair,vase,potted plant,potted plant,chair,chair,potted plant,couch,chair,chair",1,medium,,,True,0.028832493683801586,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_203.webp,,0.5579,0.6684,4,0,0,"chair,tv,chair,chair,chair,chair,oven,chair,sink,chair",1,medium,,,True,0.06808023996165095,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_205.webp,,0.6463,0.5647,1,1,0,"person,umbrella,sink,umbrella,umbrella,umbrella,person,umbrella",1,bad,,bad,True,0.28886307485755636,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_207.webp,,0.5687,0.5865,2,0,0,"couch,chair,chair,couch",1,bad,,,True,0.047996029201781476,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_211.webp,,0.6675,0.6606,2,0,0,"couch,couch,couch,chair,chair,chair,chair",1,medium,,,True,0.04587510539526134,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_222.webp,,0.6184,0.4894,1,2,0,"person,person,chair,potted plant",1,bad,,bad,True,0.2974817737259941,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_228.webp,,0.5452,0.6589,4,0,0,"couch,chair,microwave,dining table,chair,remote,microwave",1,medium,,,True,0.03786307123431998,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_229.webp,,0.6787,0.589,1,0,0,chair,1,bad,,bad,True,0.24150523195282303,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_233.webp,,0.4352,0.5764,5,0,0,"chair,chair,couch,chair,chair,chair,tv,chair,dining table,microwave",1,bad,,,True,0.0775950310657074,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_235.webp,,0.5839,0.5979,2,0,0,"couch,chair",1,bad,,good,True,0.1818515175048472,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_241.webp,,0.5048,0.6286,4,1,0,"chair,tv,chair,couch,chair,couch,chair,potted plant,chair,dining table,chair",1,medium,,,True,0.05227176164798142,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_244.webp,,0.5577,0.5783,2,1,0,"couch,chair,potted plant",1,bad,,,True,0.022036993170063673,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_247.webp,,0.586,0.6895,4,1,0,"couch,couch,chair,potted plant,potted plant,refrigerator,oven,chair,chair,potted plant",1,medium,,good,True,0.08313832547679383,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_252.webp,,0.5412,0.6459,3,0,0,"couch,couch,chair,chair,microwave",1,medium,,medium,True,0.10126230522736018,medium,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_255.webp,,0.5787,0.674,3,0,0,"chair,chair,bed,couch,chair,chair",1,medium,,,True,0.01905156710539163,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_256.webp,,0.5999,0.6999,4,2,0,"refrigerator,couch,chair,chair,chair,potted plant,chair,vase,dining table,dining table",1,medium,,,True,0.04692396808176107,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_259.webp,,0.7537,0.5653,0,0,0,,1,bad,,bad,True,0.17063038314248435,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_261.webp,,0.4694,0.5121,2,0,0,"sink,bed",1,bad,,,True,0.015873133436472286,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_265.webp,,0.49,0.6175,4,0,0,"couch,tv,bed,chair",1,medium,,,True,0.0010206295811136523,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_266.webp,,0.5138,0.5454,2,1,0,"chair,potted plant,chair,couch",1,bad,,,True,0.04341783684813866,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_271.webp,,0.6364,0.6373,2,1,0,"potted plant,couch,microwave",1,medium,,,True,0.048109088314700066,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_272.webp,,0.5853,0.679,3,0,0,"couch,tv,chair,tv,chair,couch,chair",1,medium,,,True,0.023835361130650767,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_273.webp,,0.6951,0.7613,3,1,0,"couch,couch,microwave,dining table,teddy bear,potted plant,potted plant,dining table",1,good,,good,True,0.11142489398672849,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_278.webp,,0.6065,0.6949,3,0,0,"tv,chair,dining table,chair,dining table,chair,chair,chair,chair",1,medium,,,True,0.01907297690244436,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_279.webp,,0.544,0.658,4,0,0,"chair,bed,tv,chair,dining table",1,medium,,,True,0.07875225835422023,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_281.webp,,0.5738,0.5904,2,0,0,"couch,bed,suitcase,couch",1,bad,,good,True,0.21300647668158604,good,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_283.webp,,0.6069,0.6952,3,0,0,"chair,couch,chair,couch,couch,dining table",1,medium,,,True,0.021413018419293495,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_288.webp,,0.5102,0.5426,2,0,0,"bed,chair",1,bad,,,True,0.016836264026721448,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_294.webp,,0.6362,0.5571,1,1,2,"person,bench,person,person,car,car,bench,car,chair,car",1,bad,,bad,True,0.30065278758260283,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_296.webp,,0.5993,0.6995,5,0,0,"microwave,refrigerator,chair,oven,chair,chair,dining table",1,medium,,,True,0.0608502263433493,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_299.webp,,0.5245,0.5534,2,0,0,"couch,couch,couch,chair,chair",1,bad,,,True,0.040583828706048874,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_301.webp,,0.5979,0.5284,1,0,0,"couch,couch",1,bad,,,True,0.02784433519982042,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_109.webp,,0.4688,0.4316,1,0,0,oven,1,bad,,,True,0.004449953714981303,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_169.webp,,0.3861,0.3696,1,0,0,bed,1,bad,,,True,0.02705358861003304,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_191.webp,,0.4676,0.4307,1,1,0,"chair,chair,vase,teddy bear",1,bad,,,True,0.011460147902367546,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_204.webp,,0.4682,0.4312,1,0,0,bed,1,bad,,,True,0.020482994644989594,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_234.webp,,0.4406,0.4105,1,0,0,bed,1,bad,,,True,0.012021629283901436,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_238.webp,,0.3989,0.3792,1,0,0,refrigerator,1,bad,,,True,0.013961938182948164,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_246.webp,,0.5379,0.4834,1,1,0,"couch,potted plant,potted plant,couch",1,bad,,,True,0.008412817768172098,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_268.webp,,0.4777,0.4383,1,0,0,chair,1,bad,,bad,True,0.19128703017735693,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_310.webp,,0.5823,0.5167,1,0,0,"couch,couch",1,bad,,,True,0.026886437879346525,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_311.webp,,0.6173,0.703,3,0,0,"tv,chair,couch,chair,remote",1,medium,,,True,0.03136240014929548,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_313.webp,,0.4925,0.6094,3,3,0,"clock,potted plant,couch,couch,tv,bed,vase",1,medium,,,True,0.06971003347051175,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_323.webp,,0.5289,0.5567,2,1,0,"bed,couch,potted plant",1,bad,,,True,0.03136822219949459,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_327.webp,,0.5235,0.6426,4,0,0,"couch,tv,chair,dining table,banana",1,medium,,,True,0.02007658078096569,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_328.webp,,0.4936,0.5302,2,0,0,"couch,chair,chair",1,bad,,bad,True,0.10620554133587445,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_330.webp,,0.4345,0.4859,2,0,0,"bed,bed,couch",1,bad,,,True,0.031204696702545498,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_332.webp,,0.5985,0.6989,4,0,0,"chair,chair,dining table,couch,couch,tv,chair,chair,bowl,chair",1,medium,,,True,0.06964609632772711,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_335.webp,,0.5059,0.6194,3,1,0,"couch,potted plant,chair,couch,couch,chair,dining table",1,medium,,,True,0.03672141627167563,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_338.webp,,0.6161,0.7121,4,0,0,"chair,tv,couch,chair,chair,couch,dining table",1,medium,,,True,0.041812104679621986,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_339.webp,,0.5364,0.6423,3,2,0,"tv,couch,couch,couch,chair,vase,potted plant",1,medium,,,True,0.037883076887394174,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_341.webp,,0.6151,0.6213,2,0,0,"bottle,chair,refrigerator",1,medium,,,True,0.04259362913351787,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_342.webp,,0.443,0.4922,2,1,0,"chair,vase,wine glass,vase,dining table",1,bad,,bad,True,0.14428882639928892,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_343.webp,,0.6065,0.6149,2,0,0,"couch,chair,chair,chair,chair,chair",1,medium,,,True,0.025942743829521497,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_344.webp,,0.5129,0.4647,1,0,0,bed,1,bad,,,True,0.07995908583104276,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_345.webp,,0.6181,0.5612,2,3,0,"chair,chair,chair,dining table,potted plant,potted plant,person,vase,vase",1,bad,,bad,True,0.14549731740363042,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_346.webp,,0.4709,0.5932,3,0,0,"tv,couch,chair,couch,couch",1,bad,,medium,True,0.09717195740692736,medium,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_348.webp,,0.6046,0.7035,4,1,0,"chair,chair,couch,dining table,oven,bottle,chair,vase,chair",1,medium,,,True,0.07314808650444837,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_349.webp,,0.5786,0.514,1,0,0,couch,1,bad,,,True,0.04751010590526371,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_351.webp,,0.5312,0.6484,5,0,0,"refrigerator,refrigerator,chair,couch,dining table,chair,chair,oven,couch,mouse,chair,chair",1,medium,,,True,0.02066601577292132,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_353.webp,,0.5493,0.662,5,0,0,"couch,couch,microwave,chair,oven,microwave,chair,dining table,chair,oven,oven",1,medium,,,True,0.00722919849283038,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_359.webp,,0.5912,0.6934,5,1,0,"chair,chair,tv,bed,couch,tv,dining table,chair,vase,couch",1,medium,,,True,0.026454051989434218,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_362.webp,,0.5077,0.5408,2,1,0,"bed,chair,book",1,bad,,,True,0.05779548720185679,bad,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_363.webp,,0.4634,0.5976,4,0,0,"tv,couch,chair,dining table,chair,chair,couch,chair",1,bad,,,True,0.05143561752058279,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_364.webp,,0.5063,0.4597,1,0,0,chair,1,bad,,bad,True,0.16739005780411703,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_379.webp,,0.5314,0.6485,4,0,0,"chair,couch,tv,chair,dining table,chair,chair,chair,chair,couch,chair",1,medium,,,True,0.06237009146905387,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_381.webp,,0.5612,0.6609,3,0,0,"dining table,chair,couch,chair,chair,chair,chair,chair",1,medium,,bad,True,0.1645394321114484,bad,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_383.webp,,0.6377,0.7183,3,1,0,"chair,couch,dining table,couch,chair,couch,vase,dining table,chair",1,medium,,,True,0.02166339611041344,good,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_385.webp,,0.5662,0.6646,3,0,0,"couch,couch,oven,chair,chair",1,medium,,medium,True,0.10811368736263172,medium,auto
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_390.webp,,0.5684,0.5063,1,0,0,bed,1,bad,,,True,0.04522406074406715,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_392.webp,,0.5811,0.5958,2,1,0,"couch,potted plant,chair,couch,chair,chair,couch",1,bad,,,True,0.013344708337743205,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_394.webp,,0.5102,0.6226,3,2,0,"potted plant,chair,couch,chair,tv,potted plant,chair,chair,couch,potted plant,couch,book,cup",1,medium,,,True,0.0623016832314186,medium,
+C:/Users/Hugo/Downloads/ImageScoreAI/backend/data/images/kaggle_raw/img_401.webp,,0.5781,0.5936,2,1,0,"couch,laptop,tv,couch,couch",1,bad,,medium,True,0.11053013170299092,medium,auto

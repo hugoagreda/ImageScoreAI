@@ -1000,7 +1000,7 @@ def extract_embeddings(auto_mode=False):
     print("  nuevas embeddings:", total)
 
 # =====================================
-# 6️⃣ SECOND ROUND
+#  ROUND AUTO LABEL
 # =====================================
 def auto_label_step():
 
@@ -1151,62 +1151,209 @@ def auto_label_step():
     print(f"  📈 aceptación real: {round(ratio,3)}")
 
 # =====================================
-# 📊 DATASET VISUAL DEBUG
+# 📊 METRICS VISUAL DEBUG
 # =====================================
-def dataset_visual_debug():
+def research_metrics_debug():   
 
     import matplotlib.pyplot as plt
     import seaborn as sns
-    from pathlib import Path
     import pandas as pd
+    import numpy as np
+    import joblib
+
+    from pathlib import Path
+    from sklearn.decomposition import PCA
 
     BASE_DIR = Path(__file__).resolve().parent.parent
 
-    semantic_csv = BASE_DIR / "data/datasets/interior_semantic.csv"
-    final_csv = BASE_DIR / "data/datasets/interior_final_candidates.csv"
+    history_csv = BASE_DIR / "data/debug/round_history.csv"
+    emb_dir = BASE_DIR / "data/embeddings"
+    model_path = BASE_DIR / "models/quality_head.joblib"
+    dataset_csv = BASE_DIR / "data/datasets/interior_final_candidates.csv"
 
-    print("\n📊 Generando gráficas del dataset...")
+    print("\n📊 Generando métricas RESEARCH (LinkedIn Level)...")
 
-    if semantic_csv.exists():
+    sns.set_style("whitegrid")
+    plt.rcParams["figure.dpi"] = 140
 
-        df = pd.read_csv(semantic_csv)
+    # ====================================================
+    # LOAD HISTORY
+    # ====================================================
+    if not history_csv.exists():
+        print("❌ No existe round_history.csv")
+        return
 
-        plt.figure(figsize=(8,4))
-        sns.histplot(df["room_score"], bins=30)
-        plt.title("Distribución room_score")
-        plt.show()
+    df_hist = pd.read_csv(history_csv)
+    rounds = len(df_hist)
 
-        plt.figure(figsize=(6,6))
-        sns.scatterplot(
-            data=df,
-            x="indoor_score",
-            y="room_score",
-            alpha=0.4
+    # ====================================================
+    # 1️⃣ LEARNING CURVE
+    # ====================================================
+    plt.figure(figsize=(7,5))
+    plt.plot(df_hist["round"], df_hist["accuracy"], marker="o", linewidth=2)
+    plt.title(f"Learning Curve — Accuracy Evolution ({rounds} Rounds)",weight="bold")
+    plt.xlabel("Training Round")
+    plt.ylabel("K-Fold Accuracy")
+    plt.ylim(0,1)
+    plt.tight_layout()
+    plt.show()
+
+    # ====================================================
+    # 2️⃣ LEARNING EFFICIENCY
+    # ====================================================
+    plt.figure(figsize=(7,5))
+    plt.plot(df_hist["total_samples"], df_hist["accuracy"], marker="o")
+    plt.title(f"Learning Efficiency — Accuracy vs Dataset Size ({rounds} Rounds)",weight="bold")
+    plt.xlabel("Total Training Samples")
+    plt.ylabel("K-Fold Accuracy")
+    plt.tight_layout()
+    plt.show()
+
+    # ====================================================
+    # 3️⃣ ACCURACY GAIN
+    # ====================================================
+    df_hist["acc_gain"] = df_hist["accuracy"].diff().fillna(0)
+
+    plt.figure(figsize=(7,5))
+    sns.barplot(x=df_hist["round"], y=df_hist["acc_gain"])
+    plt.title(f"Accuracy Gain per Iteration ({rounds} Rounds)",weight="bold")
+    plt.xlabel("Round")
+    plt.ylabel("Δ Accuracy")
+    plt.tight_layout()
+    plt.show()
+
+    # ====================================================
+    # LOAD EMBEDDINGS
+    # ====================================================
+    files = list(emb_dir.glob("*_embeddings.parquet"))
+
+    if not files:
+        print("⚠️ No hay embeddings.")
+        return
+
+    dfs = [pd.read_parquet(f) for f in files]
+    df_emb = pd.concat(dfs, ignore_index=True)
+
+    df_emb["embedding"] = df_emb["embedding"].apply(
+        lambda x: np.array(x, dtype=np.float32)
+    )
+
+    # ====================================================
+    # 4️⃣ PCA PROJECTION
+    # ====================================================
+    X = np.vstack(df_emb["embedding"].values)
+
+    if len(X) < 5:
+        print("⚠️ Muy pocos embeddings.")
+        return
+
+    pca = PCA(n_components=2)
+    X_2d = pca.fit_transform(X)
+
+    plt.figure(figsize=(7,6))
+    plt.scatter(X_2d[:,0], X_2d[:,1], alpha=0.5, s=15)
+    plt.title(f"Embedding Space Projection (PCA) — {rounds} Rounds",weight="bold")
+    plt.xlabel("PCA Component 1")
+    plt.ylabel("PCA Component 2")
+    plt.tight_layout()
+    plt.show()
+
+    # ====================================================
+    # 5️⃣ DECISION BOUNDARY
+    # ====================================================
+    if model_path.exists() and dataset_csv.exists():
+
+        bundle = joblib.load(model_path)
+        model = bundle["model"]
+        le = bundle["label_encoder"]
+
+        df_labels = pd.read_csv(dataset_csv, dtype=str)
+
+        df_emb2 = df_emb.merge(
+            df_labels[["image_path","final_quality"]],
+            on="image_path",
+            how="left",
+            suffixes=("","_csv")
         )
-        plt.title("Indoor vs Room Score")
+
+        # 🔥 FIX COLUMNAS DUPLICADAS
+        if "final_quality_csv" in df_emb2.columns:
+            df_emb2["final_quality"] = df_emb2["final_quality_csv"]
+            df_emb2.drop(columns=["final_quality_csv"], inplace=True)
+
+        df_emb2 = df_emb2[df_emb2["final_quality"].notna()]
+        df_emb2 = df_emb2[df_emb2["final_quality"]!=""]
+
+        if len(df_emb2) > 5:
+
+            X = np.vstack(df_emb2["embedding"].values)
+            y = le.transform(df_emb2["final_quality"])
+
+            pca2 = PCA(n_components=2)
+            X_2d = pca2.fit_transform(X)
+
+            x_min, x_max = X_2d[:,0].min()-1, X_2d[:,0].max()+1
+            y_min, y_max = X_2d[:,1].min()-1, X_2d[:,1].max()+1
+
+            xx, yy = np.meshgrid(
+                np.linspace(x_min,x_max,200),
+                np.linspace(y_min,y_max,200)
+            )
+
+            grid = np.c_[xx.ravel(),yy.ravel()]
+            grid_back = pca2.inverse_transform(grid)
+
+            Z = model.predict(grid_back)
+            Z = Z.reshape(xx.shape)
+
+            plt.figure(figsize=(7,6))
+            plt.contourf(xx,yy,Z,alpha=0.25)
+            plt.scatter(X_2d[:,0], X_2d[:,1], c=y, s=20, alpha=0.8)
+
+            plt.title(f"Decision Boundary Projection — Logistic Regression ({rounds} Rounds)",weight="bold")
+            plt.xlabel("PCA Component 1")
+            plt.ylabel("PCA Component 2")
+            plt.tight_layout()
+            plt.show()
+
+    # ====================================================
+    # 6️⃣ EMBEDDING SHIFT
+    # ====================================================
+    if "label_source" in df_emb.columns:
+
+        plt.figure(figsize=(7,6))
+
+        colors = {
+            "human":"blue",
+            "auto":"orange",
+            "":"gray"
+        }
+
+        for src,group in df_emb.groupby("label_source"):
+
+            if len(group) < 3:
+                continue
+
+            Xg = np.vstack(group["embedding"].values)
+            Xg_2d = PCA(n_components=2).fit_transform(Xg)
+
+            plt.scatter(
+                Xg_2d[:,0],
+                Xg_2d[:,1],
+                label=src,
+                alpha=0.5,
+                s=15,
+                color=colors.get(src,"gray")
+            )
+
+        plt.legend()
+        plt.title(f"Embedding Shift by Label Source — Training Evolution ({rounds} Rounds)",weight="bold")
+        plt.xlabel("PCA Component 1")
+        plt.ylabel("PCA Component 2")
+        plt.tight_layout()
         plt.show()
 
-    if final_csv.exists():
-
-        df_final = pd.read_csv(final_csv)
-
-        if "quality_bucket" in df_final.columns:
-            plt.figure(figsize=(6,4))
-            sns.countplot(data=df_final, x="quality_bucket")
-            plt.title("Quality Bucket Distribution")
-            plt.show()
-
-        if "auto_confidence" in df_final.columns:
-            plt.figure(figsize=(8,4))
-            sns.histplot(
-                df_final["auto_confidence"].dropna(),
-                bins=40
-            )
-            plt.title("Auto Confidence Distribution")
-            plt.show()
-
-    print("✅ Visual debug listo")
-
+    print("✅ Research metrics generadas")
 
 # =====================================
 # BOOTSTRAP
@@ -1223,18 +1370,16 @@ def bootstrap_dataset(auto_mode=False, img_batch=IMG):
     run_step("[1/8] DOWNLOAD", download_kaggle_images, max_new_downloads=img_batch)
     df_filter = run_step("[2/8] FILTER", filter_interiors, max_images=None)
     df_semantic = run_step("[3/8] YOLO SEMANTIC", yolo_semantic_filter, df_filter)
-
     if not auto_mode:
         run_step("[4/8] PRUNE BAD IMAGES", prune_bad_images, df_semantic)
 
     run_step("[5/8] CREATE FINAL DATASET", create_final_dataset, df_semantic)
-
+    
     if auto_mode:
         run_step("[6/8] EXTRACT EMBEDDINGS", extract_embeddings, True)
         run_step("[7/8] AUTO LABEL", auto_label_step)
 
     else:
-
         run_step("[6/8] HUMAN LABEL", human_label_step)
         run_step("[7/8] EXTRACT EMBEDDINGS", extract_embeddings, False)
 
@@ -1247,9 +1392,9 @@ if __name__ == "__main__":
     import sys
 
     auto_mode = "--auto" in sys.argv
-    show_debug = "--debug" in sys.argv
+    debug_mode = "--debug" in sys.argv
 
-    bootstrap_dataset(auto_mode=auto_mode)
-
-    if show_debug:
-        dataset_visual_debug()
+    if debug_mode:
+        research_metrics_debug()
+    else:
+        bootstrap_dataset(auto_mode=auto_mode)

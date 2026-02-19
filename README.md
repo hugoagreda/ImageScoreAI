@@ -48,17 +48,9 @@ Este modo usa auto-labeling cuando existe:
 
 - `backend/models/quality_head.joblib`
 
-## 📊 Visualización del dataset (gráficas opcionales)
-
-Puedes activar gráficas para entender visualmente cómo evoluciona el dataset y el comportamiento del auto-learning.
+## 📊 Visualización del dataset (en las 2 opciones)
 
 Este modo **no modifica el entrenamiento**, solo añade análisis visual al finalizar el pipeline.
-
-### 🤖 Auto mode + visualización (recomendado)
-
-```bash
-python backend/pipeline/dataset_pipeline.py --auto --debug
-```
 
 Genera automáticamente:
 
@@ -68,14 +60,6 @@ Genera automáticamente:
 - Histograma de `auto_confidence`
 
 Ideal para validar que el auto-learning no introduce sesgos.
-
-### 🧑 Human mode + visualización (opcional)
-
-```bash
-python backend/pipeline/dataset_pipeline.py --debug
-```
-
-Útil si quieres inspeccionar el dataset tras etiquetado manual.
 
 ## 📈 ¿Qué muestran las gráficas?
 
@@ -112,22 +96,7 @@ Confirma que se generaron/actualizaron:
 
 ## ▶️ Levantar la app
 
-### 1️⃣ Ir a la raíz del proyecto
-
-Ejecuta los comandos desde la carpeta que contiene `backend/`.
-
-### 2️⃣ Levantar API (FastAPI)
-
-```bash
-uvicorn backend.api.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-Accesos:
-
-- Health: http://127.0.0.1:8000/health
-- Swagger: http://127.0.0.1:8000/docs
-
-### 3️⃣ Levantar app visual (Gradio)
+### 1️⃣ Levantar app visual (Gradio)
 
 En otra terminal:
 
